@@ -1,0 +1,62 @@
+server:
+  port: 10000
+#========================
+# ! Mybatis
+#------------------------
+# 返回类型的实体类
+# 下划线转驼峰
+#========================
+mybatis:
+  type-aliases-package: com.logictech.entity.dto, com.logictech.entity.vo
+  configuration.map-underscore-to-camel-case: true
+
+#=======================
+# ! Spring
+#-----------------------
+# 数据源
+#=======================
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
+    username: k
+    password: 123456
+    #=======================
+    # 初始化大小，最小，最大
+    #=======================
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    #=======================
+    # 配置获取连接等待超时的时间
+    #=======================
+    maxWait: 60000
+    #=======================
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    #=======================
+    timeBetweenEvictionRunsMillis: 60000
+    #=======================
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    #=======================
+    minEvictableIdleTimeMillis: 300000
+    #=======================
+    # Oracle请使用select 1 from dual
+    #=======================
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,slf4j
+    useGlobalDataSourceStat: true
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    mode: LEGACYHTML5
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**
