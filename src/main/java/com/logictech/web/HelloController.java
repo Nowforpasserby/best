@@ -1,5 +1,6 @@
 package com.logictech.web;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,17 +13,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class HelloController {
+    @Value("${profile.message}")
+    private String message;
 
     @RequestMapping("/")
     public String getUsers(Model model) {
-        model.addAttribute("name","JG.Hannibal");
+        model.addAttribute("name", "JG.Hannibal");
         return "index";
     }
 
     @ResponseBody
-    @RequestMapping("/a")
+    @RequestMapping("/profile")
     public String getUsersT() {
-        return "index";
+        return message;
     }
 }
     
