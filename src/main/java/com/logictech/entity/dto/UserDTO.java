@@ -1,7 +1,6 @@
 package com.logictech.entity.dto;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,11 +11,11 @@ import java.io.Serializable;
  * @since 2017/11/9 上午9:31
  */
 @Table(name = "user_info")
-public class UserDTO implements Serializable {
+public class UserDTO extends CommonDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     /**
