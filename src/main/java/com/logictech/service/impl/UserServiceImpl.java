@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer addUser(UserDTO userDTO) throws Exception {
-        return userMapper.insertSelective(userDTO);
+        return userMapper.mInsert(userDTO);
     }
 
     @Override
