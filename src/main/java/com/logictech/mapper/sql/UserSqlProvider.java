@@ -13,8 +13,8 @@ public class UserSqlProvider {
                 .SELECT("c.name AS city")
                 .SELECT("c.state AS province")
                 .FROM("user_info u")
-                .INNER_JOIN("city c ON c.id = u.city_id")
-                .WHERE("c.id = #{id}")
+                .LEFT_OUTER_JOIN("city c ON c.id = u.city_id")
+                .WHERE("u.id = #{id}")
                 .toString();
     }
 }
