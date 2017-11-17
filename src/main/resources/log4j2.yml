@@ -3,50 +3,90 @@ Configuration:
 
   Properties: # 定义全局变量
     Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
-      #测试：-Dlog.level.console=warn -Dlog.level.xjj=trace
-      #生产：-Dlog.level.console=warn -Dlog.level.xjj=info
+      #测试：-Dlog.level.console=warn -Dlog.level.ora=trace
+      #生产：-Dlog.level.console=warn -Dlog.level.ora=info
       - name: log.level.console
         value: trace
-      - name: log.level.pro
+      - name: log.level.ora
         value: trace
       - name: log.path
-        value: ./log
+      #  value: /opt/logs
+        value: ./logs
       - name: project.name
         value: best
 
   Appenders:
     Console:  #输出到控制台
-      name: CONSOLE
-      target: SYSTEM_OUT
-      ThresholdFilter:
-        level: ${sys:log.level.console} # “sys:”表示：如果VM参数中没指定这个变量值，则使用本文件中定义的缺省全局变量值
-        onMatch: ACCEPT
-        onMismatch: DENY
-      PatternLayout:
-        pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
-    RollingFile: # 输出到文件，超过128MB归档
-      - name: ROLLING_FILE
-        ignoreExceptions: false
-        fileName: ${log.path}/${project.name}.log
-        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz"
+      - name: CONSOLE
+        target: SYSTEM_OUT
+        ThresholdFilter:
+          level: ${sys:log.level.console} # “sys:”表示：如果VM参数中没指定这个变量值，则使用本文件中定义的缺省全局变量值
+          onMatch: ACCEPT
+          onMismatch: DENY
         PatternLayout:
-          pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"
+          pattern: "%highlight{%d{HH:mm:ss.SSS} %-5level %logger{36}.%M() @%L - %msg%n}{FATAL=Bright Red, ERROR=Bright Magenta, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright Gray}"
+    RollingFile:
+      - name: ROLLING_DEBUG_FILE
+        fileName: "${log.path}/${project.name}-debug.log"
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}_%i.log.gz"
+        PatternLayout:
+          name: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
+        Filters:
+          ThresholdFilter:
+            - level: "INFO"
+              onMatch: "DENY"
+              onMismatch: "NEUTRAL"
+            - level: "DEBUG"
+              onMatch: "ACCEPT"
+              onMismatch: "DENY"
         Policies:
-          SizeBasedTriggeringPolicy:
-            size: "128 MB"
-        DefaultRolloverStrategy:
-          max: 1000
+          TimeBasedTriggeringPolicy: true
+          SizeBasedTriggeringPolicy : "30MB"
+      - name: ROLLING_INFO_FILE
+        fileName: "${log.path}/${project.name}-info.log"
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}_%i.log.gz"
+        PatternLayout:
+          name: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
+        Filters:
+          ThresholdFilter:
+            - level: "ERROR"
+              onMatch: "DENY"
+              onMismatch: "NEUTRAL"
+            - level: "INFO"
+              onMatch: "ACCEPT"
+              onMismatch: "DENY"
+        Policies:
+          TimeBasedTriggeringPolicy: true
+          SizeBasedTriggeringPolicy : "30MB"
+      - name: ROLLING_ERROR_FILE
+        fileName: "${log.path}/${project.name}-error.log"
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}_%i.log.gz"
+        PatternLayout:
+          name: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
+        Filters:
+          ThresholdFilter:
+            - level: "ERROR"
+              onMatch: "ACCEPT"
+              onMismatch: "DENY"
+        Policies:
+          TimeBasedTriggeringPolicy: true
+          SizeBasedTriggeringPolicy : "30MB"
 
   Loggers:
     Root:
       level: info
       AppenderRef:
         - ref: CONSOLE
-        - ref: ROLLING_FILE
-    Logger: # 为包配置特殊的Log级别，方便调试
-      - name: com.logictech
+#        - ref: SLOWCONSOLE
+        - ref: ROLLING_DEBUG_FILE
+        - ref: ROLLING_INFO_FILE
+        - ref: ROLLING_ERROR_FILE
+    Logger: # 为cn.logictech.motivator.demo包配置特殊的Log级别，方便调试
+      - name: cn.logictech
         additivity: false
-        level: ${sys:log.level.pro}
+        level: ${sys:log.level.ora}
         AppenderRef:
           - ref: CONSOLE
-          - ref: ROLLING_FILE
+          - ref: ROLLING_DEBUG_FILE
+          - ref: ROLLING_INFO_FILE
+          - ref: ROLLING_ERROR_FILE
