@@ -104,6 +104,7 @@ public class UserControllerTest extends BaseTest {
         userDTOSuccess.setPassword("ceshi1");
         userDTOSuccess.setRealName("ceshi1");
         String userJsonSuccess = JSONObject.toJSON(userDTOSuccess).toString();
+        System.out.println(userJsonSuccess);
         mockMvc.perform(post("/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userJsonSuccess))

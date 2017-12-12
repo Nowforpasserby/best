@@ -81,8 +81,8 @@ Configuration:
         - ref: ROLLING_DEBUG_FILE
         - ref: ROLLING_INFO_FILE
         - ref: ROLLING_ERROR_FILE
-    Logger: # 为cn.logictech.motivator.demo包配置特殊的Log级别，方便调试
-      - name: cn.logictech
+    Logger: # 为包配置特殊的Log级别，方便调试
+      - name: com.logictech
         additivity: false
         level: ${sys:log.level.ora}
         AppenderRef:

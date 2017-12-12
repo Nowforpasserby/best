@@ -24,7 +24,7 @@ public class CommonDTO {
     /**
      * 更新时间
      */
-    @Column(name = "create_time", insertable = false)
+    @Column(name = "update_time", insertable = false)
     private Date updateTime = new Date();
     /**
      * 更新者

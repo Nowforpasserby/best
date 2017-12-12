@@ -1,3 +1,4 @@
+env: ${spring.profiles.active}
 server:
   port: 10000
 #========================
@@ -20,9 +21,9 @@ spring:
     active: dev
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://121.40.169.50:3306/test?useUnicode=true&characterEncoding=utf-8
     username: k
-    password: 123456
+    password: cmb_02_2016
     #=======================
     # 初始化大小，最小，最大
     #=======================
@@ -62,3 +63,6 @@ spring:
         content:
           enabled: true
           paths: /**
+mapper:
+  mappers:
+    com.logictech.config.CommonMapperConfig
