@@ -28,9 +28,9 @@ Configuration:
     RollingFile:
       - name: ROLLING_DEBUG_FILE
         fileName: "${log.path}/${project.name}-debug.log"
-        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}_%i.log.gz"
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-debug_%i.log.gz"
         PatternLayout:
-          name: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
+          pattern: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
         Filters:
           ThresholdFilter:
             - level: "INFO"
@@ -40,13 +40,15 @@ Configuration:
               onMatch: "ACCEPT"
               onMismatch: "DENY"
         Policies:
-          TimeBasedTriggeringPolicy: true
+          TimeBasedTriggeringPolicy:
+            interval: "1"
+            modulate: true
           SizeBasedTriggeringPolicy : "30MB"
       - name: ROLLING_INFO_FILE
         fileName: "${log.path}/${project.name}-info.log"
-        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}_%i.log.gz"
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-info_%i.log.gz"
         PatternLayout:
-          name: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
+          pattern: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
         Filters:
           ThresholdFilter:
             - level: "ERROR"
@@ -56,20 +58,24 @@ Configuration:
               onMatch: "ACCEPT"
               onMismatch: "DENY"
         Policies:
-          TimeBasedTriggeringPolicy: true
+          TimeBasedTriggeringPolicy:
+            interval: "1"
+            modulate: true
           SizeBasedTriggeringPolicy : "30MB"
       - name: ROLLING_ERROR_FILE
         fileName: "${log.path}/${project.name}-error.log"
-        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}_%i.log.gz"
+        filePattern: "${log.path}/$${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-error_%i.log.gz"
         PatternLayout:
-          name: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
+          pattern: "%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"
         Filters:
           ThresholdFilter:
             - level: "ERROR"
               onMatch: "ACCEPT"
               onMismatch: "DENY"
         Policies:
-          TimeBasedTriggeringPolicy: true
+          TimeBasedTriggeringPolicy:
+            interval: "1"
+            modulate: true
           SizeBasedTriggeringPolicy : "30MB"
 
   Loggers:
@@ -81,7 +87,7 @@ Configuration:
         - ref: ROLLING_DEBUG_FILE
         - ref: ROLLING_INFO_FILE
         - ref: ROLLING_ERROR_FILE
-    Logger: # 为包配置特殊的Log级别，方便调试
+    Logger: # 为cn.logictech.motivator.demo包配置特殊的Log级别，方便调试
       - name: com.logictech
         additivity: false
         level: ${sys:log.level.ora}
